@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>StreamVibe — Funny Videos</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: Georgia, "Times New Roman", serif;
+      background: #14120f;
+      color: #f2ebe3;
+      min-height: 100vh;
+      line-height: 1.45;
+    }
+    header {
+      padding: 1.25rem 1.5rem;
+      border-bottom: 1px solid rgba(242, 235, 227, 0.1);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+    .brand {
+      font-size: 1.25rem;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      color: #f2ebe3;
+      text-decoration: none;
+    }
+    .brand span { color: #e8a54b; }
+    main {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 2rem 1.25rem 3rem;
+    }
+    h1 {
+      font-size: clamp(1.5rem, 4vw, 2rem);
+      font-weight: 700;
+      margin-bottom: 0.4rem;
+    }
+    .lead {
+      color: rgba(242, 235, 227, 0.65);
+      font-size: 0.95rem;
+      margin-bottom: 1.75rem;
+      font-family: system-ui, sans-serif;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 0.85rem;
+    }
+    @media (min-width: 640px) {
+      .grid { grid-template-columns: 1fr 1fr; }
+    }
+    a.card {
+      display: block;
+      text-decoration: none;
+      color: inherit;
+      padding: 1.1rem 1.2rem;
+      border: 1px solid rgba(242, 235, 227, 0.12);
+      background: rgba(242, 235, 227, 0.03);
+      transition: border-color 0.2s, background 0.2s;
+    }
+    a.card:hover {
+      border-color: #e8a54b;
+      background: rgba(232, 165, 75, 0.08);
+    }
+    .card-num {
+      font-family: system-ui, sans-serif;
+      font-size: 0.7rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #e8a54b;
+      margin-bottom: 0.45rem;
+    }
+    .card-title {
+      font-size: 1.05rem;
+      font-weight: 700;
+    }
+    .card-hint {
+      margin-top: 0.55rem;
+      font-family: system-ui, sans-serif;
+      font-size: 0.8rem;
+      color: rgba(242, 235, 227, 0.45);
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <a class="brand" href="index.html">Stream<span>Vibe</span></a>
+  </header>
+
+  <main>
+    <h1>Funny Videos</h1>
+    <p class="lead">Pick a video to watch. Titles and links are managed in <code>videos.js</code>.</p>
+    <div class="grid" id="list"></div>
+  </main>
+
+  <script src="videos.js"></script>
+  <script>
+    const list = document.getElementById("list");
+    list.innerHTML = VIDEOS.map((v, i) => `
+      <a class="card" href="watch.html?v=${encodeURIComponent(v.id)}">
+        <div class="card-num">Video ${i + 1}</div>
+        <div class="card-title">${v.title}</div>
+        <div class="card-hint">Watch →</div>
+      </a>
+    `).join("");
+  </script>
+</body>
+</html>
