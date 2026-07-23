@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StreamVibe - Funny Videos Collection</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            background: #0d0e15;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            color: #f3f4f6;
+            min-height: 100vh;
+            padding-bottom: 50px;
+        }
+
+        /* --- Navbar --- */
+        .navbar {
+            background: rgba(13, 14, 21, 0.9);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            padding: 12px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        .nav-brand {
+            font-size: 20px;
+            font-weight: 800;
+            background: linear-gradient(90deg, #8b5cf6, #ec4899);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .nav-search {
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 8px 16px;
+            border-radius: 20px;
+            color: #fff;
+            width: 260px;
+            font-size: 14px;
+            outline: none;
+        }
+
+        /* --- Main Container & Category Tabs --- */
+        .container {
+            max-width: 1280px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        .section-title h2 {
+            font-size: 22px;
+            font-weight: 700;
+            background: linear-gradient(90deg, #a78bfa, #f472b6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .category-tabs {
+            display: flex;
+            gap: 10px;
+        }
+        .tab-btn {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            color: #9ca3af;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .tab-btn.active, .tab-btn:hover {
+            background: #8b5cf6;
+            color: #fff;
+            border-color: #8b5cf6;
+        }
+
+        /* --- Video Grid Layout --- */
+        .video-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 30px;
+        }
+        .video-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+            transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+        }
+        .video-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 20px 45px rgba(124, 58, 237, 0.25);
+            border-color: rgba(124, 58, 237, 0.4);
+        }
+        .video-container {
+            position: relative;
+            width: 100%;
+            padding-bottom: 56.25%;
+            height: 0;
+            background: #000;
+        }
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        .video-info {
+            padding: 20px;
+        }
+        .video-meta-top {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            color: #9ca3af;
+            margin-bottom: 8px;
+        }
+        .video-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: #f3f4f6;
+            line-height: 1.4;
+            margin-bottom: 10px;
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 2;
+            overflow: hidden;
+        }
+        .channel-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        .channel-avatar {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #f43f5e, #8b5cf6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            font-weight: bold;
+        }
+        .channel-name {
+            font-size: 12px;
+            color: #d1d5db;
+        }
+
+        /* Responsive */
+        @media (max-width: 850px) {
+            .video-grid {
+                grid-template-columns: 1fr;
+            }
+            .navbar {
+                padding: 12px 15px;
+            }
+            .nav-search {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 顶栏导航 -->
+    <div class="navbar">
+        <div class="nav-brand">⚡ StreamVibe Hub</div>
+        <input type="text" class="nav-search" placeholder="Search collection...">
+    </div>
+
+    <div class="container">
+        <!-- 头部与分类筛选标签 -->
+        <div class="section-header">
+            <div class="section-title">
+                <h2>🔥 Featured Funny & Action Videos</h2>
+            </div>
+            <div class="category-tabs">
+                <button class="tab-btn active" onclick="filterVideos('all', this)">All</button>
+                <button class="tab-btn" onclick="filterVideos('cat', this)">Cats</button>
+                <button class="tab-btn" onclick="filterVideos('animal', this)">Animals</button>
+                <button class="tab-btn" onclick="filterVideos('action', this)">Action</button>
+            </div>
+        </div>
+
+        <!-- 四宫格视频列表 -->
+        <div class="video-grid" id="videoGrid">
+            
+            <!-- Video 1 -->
+            <div class="video-card" data-category="cat">
+                <div class="video-container">
+                    <iframe src="https://playmate.to/embed/6hzz4QII7bYKI" allowfullscreen></iframe>
+                </div>
+                <div class="video-info">
+                    <div class="video-meta-top">
+                        <span>1.45M views</span>
+                        <span>Oct 2016</span>
+                    </div>
+                    <div class="video-title">Funny Cats Compilation 2016 [BEST OF] Funny Videos Smile 5 minutes #1</div>
+                    <div class="channel-row">
+                        <div class="channel-avatar">FV</div>
+                        <span class="channel-name">Funny Vault Official</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Video 2 -->
+            <div class="video-card" data-category="cat animal">
+                <div class="video-container">
+                    <iframe src="https://playmate.to/embed/7SChl1EoVp0L4" allowfullscreen></iframe>
+                </div>
+                <div class="video-info">
+                    <div class="video-meta-top">
+                        <span>850K views</span>
+                        <span>2 days ago</span>
+                    </div>
+                    <div class="video-title">5 minutes funny cat dog compilation 😂 funny animal videos</div>
+                    <div class="channel-row">
+                        <div class="channel-avatar" style="background:#3b82f6;">PL</div>
+                        <span class="channel-name">Pet Lovers Hub</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Video 3 -->
+            <div class="video-card" data-category="animal">
+                <div class="video-container">
+                    <iframe src="https://playmate.to/embed/zkdZAF3A7S8mU" allowfullscreen></iframe>
+                </div>
+                <div class="video-info">
+                    <div class="video-meta-top">
+                        <span>2.1M views</span>
+                        <span>1 week ago</span>
+                    </div>
+                    <div class="video-title">Funny Animal Fails Try Not To Laugh 5-Minute Laugh - 5-Minute Laugh</div>
+                    <div class="channel-row">
+                        <div class="channel-avatar" style="background:#10b981;">FA</div>
+                        <span class="channel-name">FailArmy Global</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Video 4 -->
+            <div class="video-card" data-category="action">
+                <div class="video-container">
+                    <iframe src="https://playmate.to/embed/zFBrChoVYZwLf" allowfullscreen></iframe>
+                </div>
+                <div class="video-info">
+                    <div class="video-meta-top">
+                        <span>4.3M views</span>
+                        <span>3 weeks ago</span>
+                    </div>
+                    <div class="video-title">                <h1 class="title">Top 55 Hilarious Cat Moments You’ll Ever Watch  Under 5 Minutes! - Animalism</h1>
+</div>
+                    <div class="channel-row">
+                        <div class="channel-avatar" style="background:#eab308;">GP</div>
+                        <span class="channel-name">GoPro Official</span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        // 分类标签筛选逻辑
+        function filterVideos(category, btn) {
+            // 切换按钮高亮状态
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+
+            // 筛选卡片显示
+            const cards = document.querySelectorAll('.video-card');
+            cards.forEach(card => {
+                if (category === 'all' || card.getAttribute('data-category').includes(category)) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+    </script>
+</body>
+</html>
